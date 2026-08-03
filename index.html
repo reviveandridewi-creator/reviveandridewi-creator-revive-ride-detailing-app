@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revive & Ride OS | Detailing Operations</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header & Navigation -->
+        <header>
+            <h1>Revive & Ride OS</h1>
+            <p>Detailing Operations & Client Command Center</p>
+            <div class="nav-links">
+                <a href="https://squareup.com/dashboard/appointments" target="_blank" rel="noopener">Square Calendar</a>
+                <a href="https://squareup.com/dashboard/sales" target="_blank" rel="noopener">Square Payments</a>
+            </div>
+        </header>
+
+        <!-- Metrics Dashboard -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <h3>Total Revenue</h3>
+                <p id="total-revenue">$0.00</p>
+            </div>
+            <div class="metric-card">
+                <h3>Active Jobs</h3>
+                <p id="active-jobs-count">0</p>
+            </div>
+            <div class="metric-card">
+                <h3>Pending Invoices</h3>
+                <p id="pending-invoices-count">0</p>
+            </div>
+        </div>
+
+        <!-- Job & Vehicle Intake Form -->
+        <form id="job-intake-form">
+            <h2>New Job & Vehicle Intake</h2>
+            
+            <div class="form-group">
+                <label for="client-name">Client Name</label>
+                <input type="text" id="client-name" placeholder="John Doe" required>
+            </div>
+
+            <div class="form-group">
+                <label for="car-year">Year</label>
+                <input type="number" id="car-year" placeholder="2010" required>
+            </div>
+
+            <div class="form-group">
+                <label for="car-make">Make</label>
+                <input type="text" id="car-make" placeholder="Cadillac" required>
+            </div>
+
+            <div class="form-group">
+                <label for="car-model">Model</label>
+                <input type="text" id="car-model" placeholder="CTS4" required>
+            </div>
+
+            <div class="form-group">
+                <label for="service-package">Package / Service</label>
+                <input type="text" id="service-package" placeholder="Full Detail & Correction" required>
+            </div>
+
+            <div class="form-group">
+                <label for="job-price">Price ($)</label>
+                <input type="number" id="job-price" placeholder="250" required>
+            </div>
+
+            <div class="form-group">
+                <label for="invoice-status">Invoice Status</label>
+                <select id="invoice-status">
+                    <option value="Pending">Pending</option>
+                    <option value="Paid">Paid</option>
+                </select>
+            </div>
+
+            <button type="submit">Save Job to OS</button>
+        </form>
+
+        <!-- Operations Job Log Table -->
+        <div class="card">
+            <h2>Active Operations Log</h2>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Client & Vehicle</th>
+                            <th>Service</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="jobs-table-body">
+                        <!-- Dynamic Firestore Rows Will Load Here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase & App Script -->
+    <script src="app.js" type="module"></script>
+</body>
+</html>
