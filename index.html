@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revive & Ride OS - Command Center</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Firebase SDK Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header & Branding -->
+        <header class="app-header">
+            <div class="brand-box">
+                <img src="logo.png" alt="Revive & Ride Logo" class="logo">
+                <div>
+                    <h1>Revive & Ride OS</h1>
+                    <p>Detailing Operations & Client Command Center</p>
+                </div>
+            </div>
+            
+            <!-- Square Quick-Action Bridge -->
+            <div class="square-integration-bar">
+                <span><strong>Square Connected</strong></span>
+                <div class="square-links">
+                    <a href="https://squareup.com/appointments" target="_blank" class="sq-btn calendar-btn">Square Calendar</a>
+                    <a href="https://dashboard.squareup.com" target="_blank" class="sq-btn payments-btn">Payments</a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Live Dashboard Metrics -->
+        <section class="metrics-grid">
+            <div class="metric-card">
+                <h3>Total Revenue</h3>
+                <p id="total-revenue">$0.00</p>
+            </div>
+            <div class="metric-card">
+                <h3>Active Jobs</h3>
+                <p id="active-jobs-count">0</p>
+            </div>
+            <div class="metric-card">
+                <h3>Pending Invoices</h3>
+                <p id="pending-invoices-count">0</p>
+            </div>
+        </section>
+
+        <!-- Main Workspace Grid -->
+        <div class="workspace-grid">
+            <!-- Client & Vehicle Intake Form -->
+            <section class="card intake-section">
+                <h2>New Job & Vehicle Intake</h2>
+                <form id="job-intake-form">
+                    <div class="form-group">
+                        <label for="client-name">Client Name</label>
+                        <input type="text" id="client-name" required placeholder="John Doe">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="vehicle-year">Year</label>
+                            <input type="text" id="vehicle-year" placeholder="2010">
+                        </div>
+                        <div class="form-group">
+                            <label for="vehicle-make">Make</label>
+                            <input type="text" id="vehicle-make" placeholder="Cadillac">
+                        </div>
+                        <div class="form-group">
+                            <label for="vehicle-model">Model</label>
+                            <input type="text" id="vehicle-model" placeholder="CTS4">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="service-package">Package / Service</label>
+                            <input type="text" id="service-package" placeholder="Full Detail & Correction">
+                        </div>
+                        <div class="form-group">
+                            <label for="job-price">Price ($)</label>
+                            <input type="number" id="job-price" required placeholder="250">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="invoice-status">Invoice Status</label>
+                        <select id="invoice-status">
+                            <option value="Pending">Pending</option>
+                            <option value="Paid">Paid</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="primary-btn">Save Job to OS</button>
+                </form>
+            </section>
+
+            <!-- Active Jobs / Client List -->
+            <section class="card records-section">
+                <h2>Active Operations & Records</h2>
+                <div class="table-responsive">
+                    <table id="jobs-table">
+                        <thead>
+                            <tr>
+                                <th>Client</th>
+                                <th>Vehicle</th>
+                                <th>Service</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="jobs-table-body">
+                            <!-- Dynamic rows injected via app.js -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
