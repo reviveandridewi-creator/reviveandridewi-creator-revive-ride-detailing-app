@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revive & Ride Detailing OS</title>
+    
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#161b22">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Revive OS">
+
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #0d1117;
+            color: #c9d1d9;
+            margin: 0;
+            padding: 20px;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        h1 {
+            color: #58a6ff;
+            margin-bottom: 5px;
+        }
+        .metrics-container {
+            display: flex;
+            justify-content: space-around;
+            background: #161b22;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border: 1px solid #30363d;
+        }
+        .metric-card {
+            text-align: center;
+        }
+        .metric-card h3 {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #8b949e;
+        }
+        .metric-card p {
+            margin: 5px 0 0 0;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #58a6ff;
+        }
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            padding: 10px 18px;
+            background: #21262d;
+            color: #c9d1d9;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .tab-btn.active-tab {
+            background: #1f6feb;
+            color: white;
+            border-color: #1f6feb;
+        }
+        .sub-tab-btn {
+            padding: 8px 14px;
+            background: #161b22;
+            color: #8b949e;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .sub-tab-btn.active-sub-tab {
+            background: #30363d;
+            color: #58a6ff;
+            border-color: #58a6ff;
+        }
+        .panel {
+            background: #161b22;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+        }
+        .panel h2 {
+            margin-top: 0;
+            font-size: 1.2rem;
+            border-bottom: 1px solid #30363d;
+            padding-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #30363d;
+            font-size: 0.9rem;
+            vertical-align: top;
+        }
+        th {
+            color: #8b949e;
+        }
+        select.status-dropdown {
+            background: #0d1117;
+            color: #c9d1d9;
+            border: 1px solid #30363d;
+            padding: 6px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            width: 100%;
+            margin-bottom: 5px;
+        }
+        .action-btn {
+            padding: 5px 10px;
+            margin: 2px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: bold;
+            width: 100%;
+        }
+        .archive-btn { background: #238636; color: white; }
+        .unarchive-btn { background: #d29922; color: white; }
+        .delete-btn { background: #da3633; color: white; }
+        
+        .photo-section { margin-top: 8px; font-size: 0.75rem; }
+        .photo-input-group { margin-bottom: 8px; }
+        .camera-btn {
+            display: inline-block;
+            background: #21262d;
+            color: #c9d1d9;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #30363d;
+        }
+        .camera-btn:hover {
+            background: #30363d;
+            color: #58a6ff;
+            border-color: #58a6ff;
+        }
+        .photo-preview-grid {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+            margin-top: 6px;
+        }
+        .photo-thumb {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid #30363d;
+            cursor: pointer;
+        }
+        
+        .search-bar {
+            width: 100%;
+            padding: 10px 14px;
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            color: #c9d1d9;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+        .ref-card {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 12px;
+        }
+        .ref-card h3 {
+            margin-top: 0;
+            color: #58a6ff;
+            font-size: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .ref-card h3 .category-tag {
+            font-size: 0.75rem;
+            background: #21262d;
+            color: #8b949e;
+            padding: 2px 8px;
+            border-radius: 12px;
+            border: 1px solid #30363d;
+        }
+        .badge {
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            display: inline-block;
+        }
+        .badge-danger { background: rgba(218, 54, 51, 0.2); color: #f85149; border: 1px solid rgba(218, 54, 51, 0.4); }
+        .badge-warning { background: rgba(210, 153, 34, 0.2); color: #d29922; border: 1px solid rgba(210, 153, 34, 0.4); }
+        .badge-info { background: rgba(31, 111, 235, 0.2); color: #58a6ff; border: 1px solid rgba(31, 111, 235, 0.4); }
+    </style>
+</head>
+<body>
+
+    <div id="app-container">
+        <header>
+            <h1>Revive & Ride Detailing OS</h1>
+            <p style="color: #8b949e; margin: 0;">Internal Operations & Job Tracking</p>
+        </header>
+
+        <div class="metrics-container">
+            <div class="metric-card">
+                <h3>Total Revenue</h3>
+                <p id="total-revenue">$0.00</p>
+            </div>
+            <div class="metric-card">
+                <h3>Dashboard Jobs</h3>
+                <p id="active-jobs-count">0</p>
+            </div>
+            <div class="metric-card">
+                <h3>Pending Invoices</h3>
+                <p id="pending-invoices-count">0</p>
+            </div>
+        </div>
+
+        <div class="tab-buttons">
+            <button id="btn-view-active" class="tab-btn active-tab" onclick="window.toggleView('active')">Active Dashboard</button>
+            <button id="btn-view-archive" class="tab-btn" onclick="window.toggleView('archive')">Archived History</button>
+            <button id="btn-view-ref" class="tab-btn" onclick="window.toggleView('ref')">Reference Center</button>
+        </div>
+
+        <div class="main-layout">
+            <div id="active-panel" class="panel">
+                <h2>Active Job Logs</h2>
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Client & Vehicle</th>
+                                <th>Package & Notes</th>
+                                <th>Photos</th>
+                                <th>Price</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="jobs-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="archive-panel" class="panel" style="display: none;">
+                <h2>Past Customers & Archived Logs</h2>
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Client & Vehicle</th>
+                                <th>Package & Notes</th>
+                                <th>Photos</th>
+                                <th>Price</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="archive-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="ref-panel" class="panel" style="display: none;">
+                <h2>Technical & Safety Manuals</h2>
+                
+                <div class="tab-buttons" style="margin-top: 15px;">
+                    <button id="sub-btn-sops" class="sub-tab-btn active-sub-tab" onclick="window.toggleRefSubTab('sops')">SOP Procedures</button>
+                    <button id="sub-btn-sds" class="sub-tab-btn" onclick="window.toggleRefSubTab('sds')">Safety Data Sheets (SDS)</button>
+                    <button id="sub-btn-dilution" class="sub-tab-btn" onclick="window.toggleRefSubTab('dilution')">Chemical Dilution Sheet</button>
+                </div>
+
+                <input type="text" id="ref-search-input" class="search-bar" placeholder="Search references..." onkeyup="window.filterRefContent()">
+
+                <!-- SOP Procedures Container -->
+                <div id="ref-sops-content">
+                    <div class="ref-card" data-keywords="sop exterior wash wheels foam pre-rinse ceramic">
+                        <h3>Exterior Wash & Decontamination <span class="category-tag">Exterior SOP</span></h3>
+                        <ol style="padding-left: 20px; font-size: 0.85rem; line-height: 1.6;">
+                            <li>Perform pre-rinse to remove heavy surface dirt and debris.</li>
+                            <li>Apply Wheel & Tire Cleaner; agitate with designated brushes.</li>
+                            <li>Foam vehicle with Ultra Foam Soap; allow 3–5 minutes dwelling time.</li>
+                            <li>Two-bucket contact wash starting from top to bottom.</li>
+                            <li>Rinse thoroughly and apply Iron Remover if paint decontamination is needed.</li>
+                            <li>Dry using microfibers and air blower for crevices.</li>
+                        </ol>
+                    </div>
+
+                    <div class="ref-card" data-keywords="sop interior detail vacuum extract leather steam sanitize">
+                        <h3>Interior Deep Clean & Extraction <span class="category-tag">Interior SOP</span></h3>
+                        <ol style="padding-left: 20px; font-size: 0.85rem; line-height: 1.6;">
+                            <li>Blow out all seams, vents, and under-seat rails using compressed air.</li>
+                            <li>Thoroughly vacuum carpets, mats, and upholstery.</li>
+                            <li>Clean plastics, vinyl, and leather using Interior All-Purpose Cleaner.</li>
+                            <li>Pre-treat fabric stains; agitate and extract with hot water extractor.</li>
+                            <li>Clean all glass streak-free using designated glass towels.</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <!-- Safety Data Sheets (SDS) Container -->
+                <div id="ref-sds-content" style="display: none;">
+                    <div class="ref-card" data-keywords="sds wheel cleaner acid safety eye skin hazard corrosive">
+                        <h3>Heavy Duty Wheel Cleaner <span class="badge badge-danger">High Risk</span></h3>
+                        <p style="font-size: 0.85rem; margin: 5px 0;"><strong>Active Agent:</strong> Organic Acid Blend</p>
+                        <p style="font-size: 0.85rem; margin: 5px 0;"><strong>PPE Required:</strong> Safety Goggles, Chemical Gloves, Mask</p>
+                        <p style="font-size: 0.85rem; margin: 5px 0;"><strong>First Aid:</strong> Flush eyes/skin immediately with water for 15 mins. Seek medical attention if irritation persists.</p>
+                    </div>
+
+                    <div class="ref-card" data-keywords="sds apc all purpose cleaner degreaser eye skin protective gloves">
+                        <h3>All-Purpose Cleaner (APC) <span class="badge badge-warning">Moderate Risk</span></h3>
+                        <p style="font-size: 0.85rem; margin: 5px 0;"><strong>Active Agent:</strong> Alkaline Surfactant Base</p>
+                        <p style="font-size: 0.85rem; margin: 5px 0;"><strong>PPE Required:</strong> Nitrile Gloves, Eye Protection</p>
+                        <p style="font-size: 0.85rem; margin: 5px 0;"><strong>First Aid:</strong> Rinse skin/eyes with cold water. In case of ingestion, do not induce vomiting.</p>
+                    </div>
+
+                    <div class="ref-card" data-keywords="sds ceramic coating glass sealant solvent flammability PPE mask vapor">
+                        <h3>Ceramic Coating / Sealant <span class="badge badge-info">Low-Mod Risk</span></h3>
+                        <p style="font-size: 0.85rem; margin: 5px 0;"><strong>Active Agent:</strong> SiO2 / Solvent Mixture</p>
+                        <p style="font-size: 0.85rem; margin: 5px 0;"><strong>PPE Required:</strong> Respirator (Vapor), Nitrile Gloves</p>
+                        <p style="font-size: 0.85rem; margin: 5px 0;"><strong>First Aid:</strong> Move to fresh air if inhaled. Flush eyes immediately.</p>
+                    </div>
+                </div>
+
+                <!-- Dilution Sheet Container -->
+                <div id="ref-dilution-content" style="display: none;">
+                    <div style="overflow-x: auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Chemical Name</th>
+                                    <th>Ratio</th>
+                                    <th>Application / Surface</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="ref-card" data-keywords="apc all purpose cleaner dilution heavy light interior degrease">
+                                    <td><strong>All-Purpose Cleaner (APC)</strong></td>
+                                    <td>10:1 (Light) / 4:1 (Heavy)</td>
+                                    <td>Interiors (10:1) / Engines & Tires (4:1)</td>
+                                </tr>
+                                <tr class="ref-card" data-keywords="wheel tire cleaner foam dilution canon bottle">
+                                    <td><strong>Wheel & Tire Cleaner</strong></td>
+                                    <td>Direct / 2:1</td>
+                                    <td>Wheels, Tires, Wheel Wells</td>
+                                </tr>
+                                <tr class="ref-card" data-keywords="foam soap wash bucket canon dilution ratio">
+                                    <td><strong>Ultra Foam Soap</strong></td>
+                                    <td>10:1 (Foam Cannon) / 1 oz/gal</td>
+                                    <td>Paint & Exterior Wash</td>
+                                </tr>
+                                <tr class="ref-card" data-keywords="glass cleaner streak window tint safe dilution">
+                                    <td><strong>Glass Cleaner Concentrate</strong></td>
+                                    <td>10:1</td>
+                                    <td>Interior & Exterior Glass, Mirrors</td>
+                                </tr>
+                                <tr class="ref-card" data-keywords="carpet shampoo extraction fabric spot cleaner dilution">
+                                    <td><strong>Carpet & Fabric Extractor Shampoo</strong></td>
+                                    <td>20:1</td>
+                                    <td>Hot water extraction on upholstery/mats</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="./app.js"></script>
+
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js');
+        });
+      }
+    </script>
+</body>
+</html>
