@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revive & Ride Detailing OS</title>
+    
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#161b22">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Revive OS">
+
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #0d1117;
+            color: #c9d1d9;
+            margin: 0;
+            padding: 20px;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        h1 {
+            color: #58a6ff;
+            margin-bottom: 5px;
+        }
+        .metrics-container {
+            display: flex;
+            justify-content: space-around;
+            background: #161b22;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border: 1px solid #30363d;
+        }
+        .metric-card {
+            text-align: center;
+        }
+        .metric-card h3 {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #8b949e;
+        }
+        .metric-card p {
+            margin: 5px 0 0 0;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #58a6ff;
+        }
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            padding: 10px 18px;
+            background: #21262d;
+            color: #c9d1d9;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .tab-btn.active-tab {
+            background: #1f6feb;
+            color: white;
+            border-color: #1f6feb;
+        }
+        .sub-tab-btn {
+            padding: 8px 14px;
+            background: #161b22;
+            color: #8b949e;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .sub-tab-btn.active-sub-tab {
+            background: #30363d;
+            color: #58a6ff;
+            border-color: #58a6ff;
+        }
+        .panel {
+            background: #161b22;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+        }
+        .panel h2 {
+            margin-top: 0;
+            font-size: 1.2rem;
+            border-bottom: 1px solid #30363d;
+            padding-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #30363d;
+            font-size: 0.9rem;
+            vertical-align: top;
+        }
+        th {
+            color: #8b949e;
+        }
+        .search-bar {
+            width: 100%;
+            padding: 10px 14px;
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            color: #c9d1d9;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+        .ref-card {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 12px;
+        }
+        .ref-card h3 {
+            margin-top: 0;
+            color: #58a6ff;
+            font-size: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .ref-card h3 .category-tag {
+            font-size: 0.75rem;
+            background: #21262d;
+            color: #8b949e;
+            padding: 2px 8px;
+            border-radius: 12px;
+            border: 1px solid #30363d;
+        }
+        .badge {
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            display: inline-block;
+        }
+        .badge-danger { background: rgba(218, 54, 51, 0.2); color: #f85149; border: 1px solid rgba(218, 54, 51, 0.4); }
+        .badge-warning { background: rgba(210, 153, 34, 0.2); color: #d29922; border: 1px solid rgba(210, 153, 34, 0.4); }
+        .badge-info { background: rgba(31, 111, 235, 0.2); color: #58a6ff; border: 1px solid rgba(31, 111, 235, 0.4); }
+        .pro-tip {
+            background: rgba(88, 166, 255, 0.1);
+            border-left: 3px solid #58a6ff;
+            padding: 8px 12px;
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: #8b949e;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app-container">
+        <header>
+            <h1>Revive & Ride Detailing OS</h1>
+            <p style="color: #8b949e; margin: 0;">Internal Operations & Job Tracking</p>
+        </header>
+
+        <div class="metrics-container">
+            <div class="metric-card">
+                <h3>Total Revenue</h3>
+                <p id="total-revenue">$0.00</p>
+            </div>
+            <div class="metric-card">
+                <h3>Dashboard Jobs</h3>
+                <p id="active-jobs-count">0</p>
+            </div>
+            <div class="metric-card">
+                <h3>Pending Invoices</h3>
+                <p id="pending-invoices-count">0</p>
+            </div>
+        </div>
+
+        <div class="tab-buttons">
+            <button id="btn-view-active" class="tab-btn active-tab" onclick="window.toggleView('active')">Active Dashboard</button>
+            <button id="btn-view-archive" class="tab-btn" onclick="window.toggleView('archive')">Archived History</button>
+            <button id="btn-view-ref" class="tab-btn" onclick="window.toggleView('ref')">Reference Center</button>
+        </div>
+
+        <div class="main-layout">
+            <div id="active-panel" class="panel">
+                <h2>Active Job Logs</h2>
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Client & Vehicle</th>
+                                <th>Package & Notes</th>
+                                <th>Photos</th>
+                                <th>Price</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="jobs-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="archive-panel" class="panel" style="display: none;">
+                <h2>Past Customers & Archived Logs</h2>
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Client & Vehicle</th>
+                                <th>Package & Notes</th>
+                                <th>Photos</th>
+                                <th>Price</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="archive-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="ref-panel" class="panel" style="display: none;">
+                <h2>Technical & Safety Manuals</h2>
+                
+                <div class="tab-buttons" style="margin-top: 15px;">
+                    <button id="sub-btn-sops" class="sub-tab-btn active-sub-tab" onclick="window.toggleRefSubTab('sops')">SOP Procedures</button>
+                    <button id="sub-btn-sds" class="sub-tab-btn" onclick="window.toggleRefSubTab('sds')">Safety Data Sheets (SDS)</button>
+                    <button id="sub-btn-dilution" class="sub-tab-btn" onclick="window.toggleRefSubTab('dilution')">Chemical Dilution Sheet</button>
+                </div>
+
+                <input type="text" id="ref-search-input" class="search-bar" placeholder="Search references..." onkeyup="window.filterRefContent()">
+
+                <!-- SOP Procedures Container -->
+                <div id="ref-sops-content">
+                    <div class="ref-card" data-keywords="express exterior wash wheels foam active 2.0 spray wax drying aid">
+                        <h3>Express Exterior Wash <span class="category-tag">35-45 mins</span></h3>
+                        <ol style="padding-left: 20px; font-size: 0.85rem; line-height: 1.6;">
+                            <li><strong>Setup & Wheels (10 mins):</strong> Hook up Active 2.0 pressure washer. Spray wheel cleaner/tire degreaser. Scrub tires, barrels, and wheel faces. Pressure rinse.</li>
+                            <li><strong>Pre-Foam & Agitation (7 mins):</strong> Foam vehicle with Active 2.0 foam cannon. Detail badging, door handles, and front grilles while foam dwells.</li>
+                            <li><strong>Pressure Rinse & Contact Wash (12 mins):</strong> Rinse foam top-to-bottom. Perform a 1-bucket or multi-mitt contact wash working top-to-bottom. Rinse.</li>
+                            <li><strong>Dry & Protect (10 mins):</strong> Apply spray wax as a drying aid while wet. Blow out mirrors, jambs, and wheels. Final wipe and apply tire shine.</li>
+                        </ol>
+                        <div class="pro-tip"><strong>Efficiency Hack:</strong> Never dry a naked car. Always spray your spray-wax/sealant while wet before using your drying towel.</div>
+                    </div>
+
+                    <div class="ref-card" data-keywords="essential interior reset vacuum blowout two towel glass method">
+                        <h3>Essential Interior Reset <span class="category-tag">45-60 mins</span></h3>
+                        <ol style="padding-left: 20px; font-size: 0.85rem; line-height: 1.6;">
+                            <li><strong>Trash, Mats & Air Blowout (10 mins):</strong> Remove trash and floor mats. Use compressed air/Tornador to blast out vents, dash cracks, seams, and seat tracks down to carpet.</li>
+                            <li><strong>Vacuum (15 mins):</strong> High-powered vacuum pass over seats, carpets, and trunk space.</li>
+                            <li><strong>Surface Wipe & Sanitize (15 mins):</strong> Spray interior cleaner onto microfiber towel. Wipe dash, steering wheel, console, cup holders, and door panels.</li>
+                            <li><strong>Glass & Rubber Mats (10 mins):</strong> Pressure-wash and dry rubber floor mats. Clean interior glass using the two-towel method.</li>
+                        </ol>
+                        <div class="pro-tip"><strong>Two-Towel Glass Method:</strong> Keep one towel slightly damp with glass cleaner to scrub, and a bone-dry waffle-weave towel to immediately buff off.</div>
+                    </div>
+
+                    <div class="ref-card" data-keywords="steam sanitization deep interior drill brush hot water extraction">
+                        <h3>Steam Sanitization & Deep Interior <span class="category-tag">1.5 - 2.0 hours</span></h3>
+                        <ol style="padding-left: 20px; font-size: 0.85rem; line-height: 1.6;">
+                            <li><strong>Trash & High-Pressure Blowout (15 mins):</strong> Clear mats/trash. Blast crevices, seat tracks, and vents with air while warming steamer.</li>
+                            <li><strong>Dry Vacuum Pass (15 mins):</strong> Vacuum loose heavy dirt before applying steam or liquid.</li>
+                            <li><strong>Steam & Agitation Phase (45 mins):</strong> Steam vents, tracks, leather, and door cards. Spray spot cleaner on fabric stains, agitate with drill brush, and steam extract/wipe clean.</li>
+                            <li><strong>Final Vacuum, Protectant & Glass (20 mins):</strong> Quick vacuum pass for loosened debris. Protect plastic/vinyl with interior dressing. Wipe glass.</li>
+                        </ol>
+                    </div>
+
+                    <div class="ref-card" data-keywords="wet hold full detail showroom interior dust magnet">
+                        <h3>The 'Wet-Hold' Full Detail <span class="category-tag">1.5 - 2.5 hours</span></h3>
+                        <ol style="padding-left: 20px; font-size: 0.85rem; line-height: 1.6;">
+                            <li><strong>Exterior Wash (25 mins):</strong> Clean wheels/tires. Foam, brush crevices, contact wash, heavy flood rinse. <em>STOP HERE - Leave exterior soaking wet.</em></li>
+                            <li><strong>Interior Blowout (10 mins):</strong> Aggressively blast vents, seat tracks, and crevices with air. Flying dust lands on wet paint and sticks to water droplets.</li>
+                            <li><strong>Interior Deep Clean (35 mins):</strong> Vacuum carpets/seats, scrub dash/panels, apply UV protectant, clean interior windows.</li>
+                            <li><strong>Exterior Re-Rinse (5 mins):</strong> Fast top-to-bottom pressure rinse to blast away settled interior dust.</li>
+                            <li><strong>Exterior Dry & Protect (15 mins):</strong> Spray ceramic sealant/spray wax on wet panels as drying aid. Blow out water and dry.</li>
+                            <li><strong>Final Touches (10 mins):</strong> Clean exterior glass, dress tires, apply trim restorer, re-install mats.</li>
+                        </ol>
+                        <div class="pro-tip"><strong>Dust Control Mastery:</strong> Blowing out an interior creates a dust cloud. Using wet exterior paint as a 'magnet' traps dust—just avoid direct sunlight to prevent water spots.</div>
+                    </div>
+
+                    <div class="ref-card" data-keywords="paint correction 1-step 2-step 3-step iron remover clay pad ipa panel prep polish">
+                        <h3>Paint Correction Services <span class="category-tag">2.5 - 6.0+ hours</span></h3>
+                        <ol style="padding-left: 20px; font-size: 0.85rem; line-height: 1.6;">
+                            <li><strong>Decon Wash Phase (30 mins):</strong> Wheel clean -> Foam & Wash -> Apply Iron Remover (MWC neat) -> Clay mitt/bar pass.</li>
+                            <li><strong>Drying & Prep Tape (20 mins):</strong> Blow dry paint completely. Mask off trim, emblems, rubber seals, and sensitive body lines with painter's tape.</li>
+                            <li><strong>Correction Phase:</strong> 
+                                <ul>
+                                    <li><em>1-Step (1-1.5 hrs):</em> Machine polish to clear ~50-70% defects.</li>
+                                    <li><em>2-Step (2.5-3.5 hrs):</em> Heavy cutting compound pass followed by fine finishing polish.</li>
+                                    <li><em>3-Step (4+ hrs):</em> Heavy compound -> Medium refining -> Ultra-fine jewel polish.</li>
+                                </ul>
+                            </li>
+                            <li><strong>Panel Prep & Protection (25 mins):</strong> IPA/Panel Prep wipe down to remove polishing oils. Apply ceramic sealant or wax. Buff off and remove tape.</li>
+                        </ol>
+                    </div>
+
+                    <div class="ref-card" data-keywords="campers rv exterior wash roof telescoping pole brush wand extension">
+                        <h3>Campers & RV Exterior Wash <span class="category-tag">1.0 - 1.5 hours</span></h3>
+                        <ol style="padding-left: 20px; font-size: 0.85rem; line-height: 1.6;">
+                            <li><strong>Roof Prep & Rinse First (20 mins):</strong> Start on roof or upper cap. Push dirt downward. Pressure rinse top-to-bottom.</li>
+                            <li><strong>High-Volume Pre-Foam (15 mins):</strong> Foam high-up panels with long wand/extension nozzle.</li>
+                            <li><strong>Extended Brush Contact Wash (30 mins):</strong> Use soft-bristle pole brush on a telescoping handle to scrub side panels without moving ladders.</li>
+                            <li><strong>Final High-Volume Rinse & Air Blowout (20 mins):</strong> Top-to-bottom rinse, blow off glass panels, shine tires, and clean lower storage compartments.</li>
+                        </ol>
+                        <div class="pro-tip"><strong>Ladder Elimination:</strong> A 6-to-12ft pressure washer extension and telescoping brush eliminates 80% of ladder climbing.</div>
+                    </div>
+                </div>
+
+                <!-- Safety Data Sheets (SDS) Container -->
+                <div id="ref-sds-content" style="display: none;">
+                    <div class="ref-card" data-keywords="sds green star gs koch chemie alkaline degreaser danger eye damage skin irritant">
+                        <h3>Koch-Chemie Green Star (GS) <span class="badge badge-danger">Danger</span></h3>
+                        <p style="font-size: 0.85rem; margin: 3px 0;"><strong>Active Agent:</strong> Anionic/Non-ionic Surfactants, Sodium Hydroxide (pH ~12.5)</p>
+                        <p style="font-size: 0.85rem; margin: 3px 0;"><strong>PPE Required:</strong> Nitrile/Butyl Gloves, Chemical Splash Goggles, Protective Apron</p>
+                        <p style="font-size: 0.85rem; margin: 3px 0;"><strong>First Aid:</strong> Flush eyes with water for 15+ mins immediately; seek medical attention. Wash skin thoroughly.</p>
+                    </div>
+
+                    <div class="ref-card" data-keywords="sds pol star po koch chemie interior fabric leather warning eye irritant">
+                        <h3>Koch-Chemie Pol Star (Po) <span class="badge badge-warning">Warning</span></h3>
+                        <p style="font-size: 0.85rem; margin: 3px 0;"><strong>Active Agent:</strong> Neutral Surfactant Blend (pH 7.0-7.5)</p>
+                        <p style="font-size: 0.85rem; margin: 3px 0;"><strong>PPE Required:</strong> Protective Gloves for prolonged scrubbing, Safety Glasses</p>
+                        <p style="font-size: 0.85rem; margin: 3px 0;"><strong>First Aid:</strong> Rinse eyes cautiously with water for 15 mins. Wash skin with soap and water.</p>
+                    </div>
+
+                    <div class="ref-card" data-keywords="sds gentle snow foam gsf koch chemie pre wash cherry neutral">
+                        <h3>Koch-Chemie Gentle Snow Foam (GSF) <span class="badge badge-info">Low Hazard</span></h3>
+                        <p style="font-size: 0.85rem; margin: 3px 0;"><strong>Active Agent:</strong> pH-Neutral Foaming Surfactants (pH ~7.5)</p>
+                        <p style="font-size: 0.85rem; margin: 3px 0;"><strong>PPE Required:</strong> Standard Workwear / Gloves for sensitive skin</p>
+                        <p style="font-size: 0.85rem; margin: 3px 0;"><strong>First Aid:</strong> Flush eyes with water if irritated. Fresh air if inhaled.</p>
+                    </div>
+
+                    <div class="ref-card" data-keywords="sds brake buster p&s wheel cleaner danger eye damage skin irritant">
+                        <h3>P&S Brake Buster <span class="badge badge-danger">Danger</span></h3>
+                        <p style="font-size: 0.85rem; margin: 3px 0;"><strong>Active Agent:</strong> Alkaline Builders & Corrosion Inhibitors (pH ~11.0-11.5)</p>
+                        <p style="font-size: 0.85rem; margin: 3px 0;"><strong>PPE Required:</strong> Nitrile Gloves, Safety Glasses / Face Shield</p>
+                        <p style="font-size: 0.85rem; margin: 3px 0;"><strong>First Aid:</strong> Immediately flush eyes with running water for 15+ mins; get medical attention.</p>
+                    </div>
+
+                    <div class="ref-card" data-keywords="sds turtle wax hybrid solutions leather mist eye irritant">
+                        <h3>Turtle Wax Hybrid Solutions Leather Mist <span class="badge badge-warning">Warning</span></h3>
+                        <p style="font-size: 0.85rem; margin: 3px 0;"><strong>Active Agent:</strong> Natural/Synthetic Conditioning Oils, Aloe Vera (pH ~6.5-7.5)</p>
+                        <p style="font-size: 0.85rem; margin: 3px 0;"><strong>PPE Required:</strong> Standard Ventilation, Gloves Optional</p>
+                        <p style="font-size: 0.85rem; margin: 3px 0;"><strong>First Aid:</strong> Flush eyes with water for 15 mins. Do not induce vomiting if swallowed.</p>
+                    </div>
+
+                    <div class="ref-card" data-keywords="sds griots garage leather 3 in 1 warning eye irritant">
+                        <h3>Griot's Garage Leather 3-in-1 <span class="badge badge-warning">Warning</span></h3>
+                        <p style="font-size: 0.85rem; margin: 3px 0;"><strong>Active Agent:</strong> Emulsified Oils & UV Inhibitors (pH ~6.8-7.2)</p>
+                        <p style="font-size: 0.85rem; margin: 3px 0;"><strong>PPE Required:</strong> Standard Detailing Gloves</p>
+                        <p style="font-size: 0.85rem; margin: 3px 0;"><strong>First Aid:</strong> Flush eyes with water for 15 mins; seek medical attention if irritation persists.</p>
+                    </div>
+
+                    <div class="ref-card" data-keywords="sds lexol all leather conditioner neatsfoot oil">
+                        <h3>Lexol All Leather Conditioner <span class="badge badge-info">Low Hazard</span></h3>
+                        <p style="font-size: 0.85rem; margin: 3px 0;"><strong>Active Agent:</strong> Emulsified Neatsfoot Oil Compound (pH ~6.0-7.0)</p>
+                        <p style="font-size: 0.85rem; margin: 3px 0;"><strong>PPE Required:</strong> Standard Work Gloves</p>
+                        <p style="font-size: 0.85rem; margin: 3px 0;"><strong>First Aid:</strong> Rinse eyes cautiously with water for 15 mins. Wash skin with soap and water.</p>
+                    </div>
+
+                    <div class="ref-card" data-keywords="sds meguiars last touch spray detailer quick detailer clay lube">
+                        <h3>Meguiar's Last Touch Spray Detailer <span class="badge badge-warning">Warning</span></h3>
+                        <p style="font-size: 0.85rem; margin: 3px 0;"><strong>Active Agent:</strong> Aqueous Lubricating Polymers (pH 7.0-8.0)</p>
+                        <p style="font-size: 0.85rem; margin: 3px 0;"><strong>PPE Required:</strong> Standard Work Gloves, Safety Glasses overhead</p>
+                        <p style="font-size: 0.85rem; margin: 3px 0;"><strong>First Aid:</strong> Flush eyes with water for 15 mins. Seek medical attention if irritation persists.</p>
+                    </div>
+
+                    <div class="ref-card" data-keywords="sds meguiars hyper dressing d170 silicone emulsion tire trim">
+                        <h3>Meguiar's Hyper Dressing (D170) <span class="badge badge-warning">Warning</span></h3>
+                        <p style="font-size: 0.85rem; margin: 3px 0;"><strong>Active Agent:</strong> Water-Based Silicone Emulsion (pH ~7.5-8.5)</p>
+                        <p style="font-size: 0.85rem; margin: 3px 0;"><strong>PPE Required:</strong> Nitrile Gloves, Safety Glasses</p>
+                        <p style="font-size: 0.85rem; margin: 3px 0;"><strong>First Aid:</strong> Flush eyes cautiously with water for 15+ mins. Seek medical attention if needed.</p>
+                    </div>
+
+                    <div class="ref-card" data-keywords="sds meguiars hybrid ceramic wax sio2 spray sealant">
+                        <h3>Meguiar's Hybrid Ceramic Wax <span class="badge badge-warning">Warning</span></h3>
+                        <p style="font-size: 0.85rem; margin: 3px 0;"><strong>Active Agent:</strong> SiO2 Silicon Dioxide Polymers (pH 7.0-8.0)</p>
+                        <p style="font-size: 0.85rem; margin: 3px 0;"><strong>PPE Required:</strong> Protective Gloves, Safety Glasses</p>
+                        <p style="font-size: 0.85rem; margin: 3px 0;"><strong>First Aid:</strong> Flush eyes with copious water for 15 mins. Seek medical attention if irritation persists.</p>
+                    </div>
+
+                    <div class="ref-card" data-keywords="sds meguiars carpet cloth re-fresher fabric deodorizer">
+                        <h3>Meguiar's Carpet & Cloth Re-Fresher <span class="badge badge-warning">Warning</span></h3>
+                        <p style="font-size: 0.85rem; margin: 3px 0;"><strong>Active Agent:</strong> Odor-Neutralizing Enzyme/Polymer Compound (pH ~7.0)</p>
+                        <p style="font-size: 0.85rem; margin: 3px 0;"><strong>PPE Required:</strong> Standard PPE, Gloves Optional</p>
+                        <p style="font-size: 0.85rem; margin: 3px 0;"><strong>First Aid:</strong> Flush eyes with clean water for 15 mins. Move to fresh air if mist inhaled.</p>
+                    </div>
+                </div>
+
+                <!-- Chemical Dilution Sheet Container -->
+                <div id="ref-dilution-content" style="display: none;">
+                    <div style="overflow-x: auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Chemical Name</th>
+                                    <th>Dilution Ratio</th>
+                                    <th>Application & Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="ref-card" data-keywords="koch chemie green star gs apc degreaser">
+                                    <td><strong>Koch-Chemie Green Star (GS)</strong></td>
+                                    <td>1:10 (Exterior) / 1:5 (Engine/Heavy)</td>
+                                    <td>Heavy-duty APC for engines, tires, wheel wells. Allow 2-3 min dwell time to break bonds without scrubbing. Avoid polished aluminum.</td>
+                                </tr>
+                                <tr class="ref-card" data-keywords="koch chemie pol star po leather fabric alcantara">
+                                    <td><strong>Koch-Chemie Pol Star (Po)</strong></td>
+                                    <td>1:5 to 1:20 (Water)</td>
+                                    <td>Neutral cleaner for fine leather, Alcantara, carpets. Agitate with soft brush and wipe clean.</td>
+                                </tr>
+                                <tr class="ref-card" data-keywords="koch chemie gentle snow foam gsf pre-wash">
+                                    <td><strong>Koch-Chemie Gentle Snow Foam (GSF)</strong></td>
+                                    <td>40-50ml in Foam Lance (~1:20 to 1:30)</td>
+                                    <td>pH-neutral pre-wash snow foam. Allow foam blanket to dwell 3-5 mins before pressure rinsing.</td>
+                                </tr>
+                                <tr class="ref-card" data-keywords="p&s brake buster wheel tire cleaner">
+                                    <td><strong>P&S Brake Buster</strong></td>
+                                    <td>RTU or 1:1 (Maintenance)</td>
+                                    <td>Non-acid wheel & tire cleaner. Spray on cool wheels, let dwell for 2 mins to melt brake dust before rinsing.</td>
+                                </tr>
+                                <tr class="ref-card" data-keywords="turtle wax hybrid solutions leather mist">
+                                    <td><strong>Turtle Wax Leather Mist</strong></td>
+                                    <td>Ready To Use (RTU)</td>
+                                    <td>Mist onto microfiber applicator or surface. Gently agitate finished leather and buff dry.</td>
+                                </tr>
+                                <tr class="ref-card" data-keywords="griots garage leather 3 in 1">
+                                    <td><strong>Griot's Leather 3-in-1</strong></td>
+                                    <td>Ready To Use (RTU)</td>
+                                    <td>Work into leather with horsehair/detailing brush to speed up cleaning. Wipe away lifted grime.</td>
+                                </tr>
+                                <tr class="ref-card" data-keywords="lexol all leather conditioner">
+                                    <td><strong>Lexol Leather Conditioner</strong></td>
+                                    <td>Ready To Use (RTU)</td>
+                                    <td>Apply moderate amount with foam pad to genuine leather, allow 5-10 mins to penetrate, buff off excess.</td>
+                                </tr>
+                                <tr class="ref-card" data-keywords="meguiars last touch spray detailer clay lube">
+                                    <td><strong>Meguiar's Last Touch Detailer</strong></td>
+                                    <td>RTU (Quick Detail) / 1:1 (Clay Lube)</td>
+                                    <td>Final paint wipe down, gloss enhancement, or diluted 1:1 with water as a clay bar lubricant.</td>
+                                </tr>
+                                <tr class="ref-card" data-keywords="meguiars hyper dressing d170 tire trim engine">
+                                    <td><strong>Meguiar's Hyper Dressing (D170)</strong></td>
+                                    <td>1:1 (High Gloss) to 4:1 (Natural Satin)</td>
+                                    <td>Water-based dressing for rubber tires, plastic engine trim, and vinyl moldings. Avoid floor controls.</td>
+                                </tr>
+                                <tr class="ref-card" data-keywords="meguiars hybrid ceramic wax sio2 sealant">
+                                    <td><strong>Meguiar's Hybrid Ceramic Wax</strong></td>
+                                    <td>Ready To Use (RTU)</td>
+                                    <td>Spray on wet panels after wash and rinse off thoroughly, or spray-on/wipe-off on dry paint.</td>
+                                </tr>
+                                <tr class="ref-card" data-keywords="meguiars carpet cloth re-fresher fabric deodorizer">
+                                    <td><strong>Meguiar's Carpet Re-Fresher</strong></td>
+                                    <td>Ready To Use (RTU)</td>
+                                    <td>Vacuum interior, mist lightly over carpets and cloth upholstery, allow to air dry completely.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="./app.js"></script>
+
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js');
+        });
+      }
+    </script>
+</body>
+</html>
